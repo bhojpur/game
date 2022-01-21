@@ -1,6 +1,14 @@
 version: "3"
 
+vars:
+  GREETING: Hello, Game Developer!
+
 tasks:
+    default:
+        cmds:
+        - echo "{{.GREETING}}"
+        silent: true
+
     build-web:
         desc: Build the web application
         cmds:
@@ -44,7 +52,7 @@ tasks:
         cmds:
         - GOFLAGS=-mod=mod go run server.go
  
-     run-web-client:
+    run-web-client:
         desc: Run the web client application from source code
         cmds:
         - GOFLAGS=-mod=mod go run client.go
