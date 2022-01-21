@@ -21,7 +21,7 @@ package cmd
 // THE SOFTWARE.
 
 import (
-	"github.com/bhojpur/web/pkg/version"
+	"github.com/bhojpur/game/pkg/version"
 	"github.com/spf13/cobra"
 )
 
