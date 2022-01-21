@@ -1,0 +1,61 @@
+before:
+  hooks:
+    - go generate -v ./...
+builds:
+- id: gamesvr
+  env:
+  - CGO_ENABLED=0
+  main: server.go
+  binary: gamesvr
+  ldflags:
+  - -s -w -X github.com/bhojpur/game/cmd/server.version={{.Version}}-{{.ShortCommit}}
+- id: gamectl
+  env:
+  - CGO_ENABLED=0
+  main: client.go
+  binary: gamectl
+  flags:
+    - -tags=gamectl
+  ldflags:
+  - -s -w -X github.com/bhojpur/game/cmd/client.version={{.Version}}-{{.ShortCommit}}
+archives:
+- id: gamesvr
+  replacements:
+    darwin: Darwin
+    linux: Linux
+    386: i386
+    amd64: x86_64
+  builds:
+  - gamesvr
+- id: gamectl
+  files:
+  - "none*"
+  format: binary
+  builds:
+  - gamectl
+  replacements:
+    darwin: Darwin
+    linux: Linux
+    386: i386
+    amd64: x86_64
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+    - '^docs:'
+    - '^test:'
+release:
+  prerelease: auto
+dockers:
+  - goos: linux
+    goarch: amd64
+    goarm: ''
+    dockerfile: Dockerfile
+    image_templates:
+    - "ghcr.io/bhojpur/game:{{ .Tag }}"
+    extra_files:
+    - README.md
